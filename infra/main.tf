@@ -4,23 +4,38 @@ module "storage" {
   table_name  = var.table_name
 }
 
-module "ocr_worker"{
+module "db_worker"{
   source = "./modules/lambda_worker"
   lambda_zip_path = "mock_lambda.zip"
-  worker_name = "ocr_worker"
+  worker_name = "db_worker"
+  handler_name = ""
+  environment_variables = {
+    BUCKET_NAME = module.storage.bucket_name
+  }
 }
 
 module "llm_worker"{
   source = "./modules/lambda_worker"
   lambda_zip_path = "mock_lambda.zip"
   worker_name = "llm_worker"
+  handler_name = ""
+  environment_variables = {
+    BUCKET_NAME = module.storage.bucket_name
+    NEXT_QUEUE  = module.db_worker.queue_url 
+  }
 }
 
-module "db_worker"{
+module "ocr_worker"{
   source = "./modules/lambda_worker"
-  lambda_zip_path = "mock_lambda.zip"
-  worker_name = "db_worker"
+  lambda_zip_path = "lambda1.zip"
+  worker_name = "ocr_worker"
+  handler_name = "PdfProcessor::PdfProcessor.Functions.PdfHandler::ProcessPdf"
+  environment_variables = {
+    BUCKET_NAME = module.storage.bucket_name
+    NEXT_QUEUE  = module.llm_worker.queue_url
+  }
 }
+
 resource "aws_sqs_queue_policy" "allow_s3_to_sqs1" {
   queue_url = module.ocr_worker.queue_url 
   policy = jsonencode({

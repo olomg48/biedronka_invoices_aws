@@ -3,6 +3,7 @@ terraform.tfvars
 *.tfstate
 .terraform.lock.hcl
 .terraform/
-*/bin
-*/obj
+bin/
+obj/
 *.zip
+*.vs

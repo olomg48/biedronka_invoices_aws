@@ -11,7 +11,7 @@ public class Function
     {
         // Logi automatycznie trafią do AWS CloudWatch
         context.Logger.LogInformation("Lambda została uruchomiona.");
-        
-        return $"Hello World! Twoja wiadomość to: {input}";
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME");
+        return $"Hello World! Twoja wiadomość to: {bucketName}";
     }
 }
