@@ -1,5 +1,6 @@
 resource "aws_sqs_queue" "queue" {
   name = "${var.worker_name}-queue"
+  visibility_timeout_seconds = 300
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -36,7 +37,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 resource "aws_lambda_function" "lambda" {
   function_name = var.worker_name
   role          = aws_iam_role.lambda_role.arn
-  handler       = "MockProcessor::MockProcessor.Function::FunctionHandler"
+  handler       = var.handler_name
   runtime       = "provided.al2"
 
   filename         = var.lambda_zip_path

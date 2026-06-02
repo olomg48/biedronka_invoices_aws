@@ -8,7 +8,7 @@ module "db_worker"{
   source = "./modules/lambda_worker"
   lambda_zip_path = "mock_lambda.zip"
   worker_name = "db_worker"
-  handler_name = ""
+  handler_name = "PdfProcessor::PdfProcessor.Functions.PdfHandler::ProcessPdf"
   environment_variables = {
     BUCKET_NAME = module.storage.bucket_name
   }
@@ -18,7 +18,7 @@ module "llm_worker"{
   source = "./modules/lambda_worker"
   lambda_zip_path = "mock_lambda.zip"
   worker_name = "llm_worker"
-  handler_name = ""
+  handler_name = "PdfProcessor::PdfProcessor.Functions.PdfHandler::ProcessPdf"
   environment_variables = {
     BUCKET_NAME = module.storage.bucket_name
     NEXT_QUEUE  = module.db_worker.queue_url 
