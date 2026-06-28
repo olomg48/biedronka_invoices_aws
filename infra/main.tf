@@ -33,6 +33,7 @@ module "ocr_worker"{
   environment_variables = {
     BUCKET_NAME = module.storage.bucket_name
     NEXT_QUEUE  = module.llm_worker.queue_url
+    MISTRAL_API_KEY  = var.mistral_key
   }
 }
 
